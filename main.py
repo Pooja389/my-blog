@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text,ForeignKey
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import os
 
 # Import your forms from the forms.py
 from forms import CreatePostForm
@@ -20,7 +20,7 @@ from forms import CommentForm
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv("secret_key")
 ckeditor = CKEditor(app)
 bootstrap = Bootstrap5(app)
 
@@ -30,7 +30,7 @@ bootstrap = Bootstrap5(app)
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("db_uri")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -143,7 +143,7 @@ def login():
             if check_password_hash(user.password, password_):
                 login_user(user)
                 session['logged_out'] = False
-                if user.email == "p1219513@gmail.com":
+                if user.email == os.getenv("admin_email"):
                     session['admin'] = True
                     return redirect(url_for("get_all_posts"))
                 else:
@@ -263,4 +263,4 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    app.run(debug = False)
