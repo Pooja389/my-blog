@@ -17,7 +17,8 @@ from forms import Registerform
 from forms import Loginform
 from forms import CommentForm
 
-
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("secret_key")
@@ -30,7 +31,7 @@ bootstrap = Bootstrap5(app)
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("db_uri")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("db_uri",'sqlite:///posts.db')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
