@@ -38,9 +38,9 @@ db.init_app(app)
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    email: Mapped[str] = mapped_column(String(100), unique=True)
-    password: Mapped[str] = mapped_column(String(100))
-    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(200), unique=True)
+    password: Mapped[str] = mapped_column(String(200))
+    name: Mapped[str] = mapped_column(String(200))
 
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment",back_populates="comment_author")
@@ -112,7 +112,7 @@ def register():
         name = request.form.get("name")
         email = request.form.get("email")
         password_ = request.form.get("password")
-        password = generate_password_hash(password_, method='scrypt', salt_length=8)
+        password = generate_password_hash(password_, method='scrypt', salt_length=3)
 
         if email not in email_list:
             new_user = User(
@@ -264,4 +264,4 @@ def contact():
 
 
 if __name__ == "__main__":
-    app.run(debug = False)
+    app.run(debug = True)
