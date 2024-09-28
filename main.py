@@ -93,7 +93,7 @@ def admin_only(f):
             return abort(403)  # You could also redirect to the login page
 
         # If authenticated but not an admin (id != 1), abort with a 403 error
-        if current_user.id != 1:
+        if current_user.email != 2:
             return abort(403)
 
         # Otherwise, the user is an admin, continue with the route function
@@ -112,7 +112,8 @@ def register():
         name = request.form.get("name")
         email = request.form.get("email")
         password_ = request.form.get("password")
-        password = generate_password_hash(password_, method='scrypt', salt_length=3)
+        password = generate_password_hash(password_, method='scrypt')
+        print(len(password))
 
         if email not in email_list:
             new_user = User(
